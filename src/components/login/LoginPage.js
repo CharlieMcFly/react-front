@@ -1,54 +1,62 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
+import LoginForm from './LoginForm';
+import * as loginActions from '../../actions/loginActions';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 class LoginPage extends React.Component {
 
     constructor(props, context) {
         super(props, context);
         this.state = {
-            login: { email: "", password: "" }
+            login: { email: "", password: "" },
+            errors: {}
         };
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.onClickSave = this.onClickLogin.bind(this);
+        this.updateLoginState = this.updateLoginState.bind(this);
+        this.logUser = this.logUser.bind(this);
     }
 
-    onEmailChange(event) {
-        const login = this.state.login;
-        login.email = event.target.value;
-        this.setState({ login });
+    updateLoginState(event) {
+        const field = event.target.name;
+        let login = this.state.login;
+        login[field] = event.target.value;
+        return this.setState({ login: login });
     }
 
-    onPasswordChange(event) {
-        const login = this.state.login;
-        login.password = event.target.value;
-        this.setState({ login });
+    logUser(event) {
+        event.preventDefault();
+        this.props.actions.logUser(this.state.login);
     }
 
-    onClickLogin() {
-        // this.props.actions.loginUser(this.state.login);
-        alert(`Login : ${this.state.login.email} / ${this.state.login.password}`);
-    }
-
-    render(){
+    render() {
         return (
-             <div>
-                <h1> Login </h1>
-                <input
-                    type="text"
-                    onChange={this.onEmailChange}
-                    value={this.state.login.email} />
-                <input
-                    type="password"
-                    onChange={this.onPasswordChange}
-                    value={this.state.login.password} />
-                <input
-                    type="submit"
-                    value="Login"
-                    onClick={this.onClickSave} />
-            </div>
+            <LoginForm
+                onChange={this.updateLoginState}
+                onSave={this.logUser}
+                login={this.state.login}
+                errors={this.state.errors}
+            />
         );
     }
 
 }
 
-export default LoginPage;
+LoginPage.propTypes = {
+    login: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state, ownProps) {
+    let login = { email: "", password: "" };
+    return {
+        login
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(loginActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

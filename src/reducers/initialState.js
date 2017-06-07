@@ -1,4 +1,6 @@
 export default {
     authors : [],
-    courses : []
+    courses : [],
+    token: "",
+    cars: []
 };

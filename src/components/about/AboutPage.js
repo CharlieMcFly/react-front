@@ -5,7 +5,7 @@ class LoginPage extends React.Component {
     render() {
         return (
             <div>
-                <h1> Login </h1>
+                <h1> About </h1>
                 <p> React, Reduc and React Router </p>
             </div>
         );

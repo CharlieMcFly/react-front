@@ -11,6 +11,8 @@ const Header = () => {
             <Link to="/about" activeClassName="active">About</Link>
             {" | "}
             <Link to="/login" activeClassName="active">Login</Link>
+             {" | "}
+            <Link to="/devis" activeClassName="active">Devis</Link>
             
         </nav>
     );
